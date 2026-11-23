@@ -1,0 +1,118 @@
+---
+import { site } from '../config/site';
+import { richLines, richInline } from '../lib/text';
+
+const { testimonials } = site;
+const [main, ...rest] = testimonials.items;
+---
+
+<section class="testimonials section section--charcoal" id="velemenyek" aria-labelledby="testimonials-title">
+  <div class="container">
+    <h2 id="testimonials-title" class="kicker" data-reveal="up">{testimonials.kicker}</h2>
+
+    {
+      main && (
+        <figure class="quote quote--main">
+          <span class="quote__mark" aria-hidden="true" data-reveal="fade">
+            “
+          </span>
+          <blockquote>
+            <p class="display quote__text" data-reveal="mask" set:html={richLines(main.quote)} />
+          </blockquote>
+          <figcaption class="quote__by" data-reveal="up" data-delay="500">
+            <span class="quote__name">— {main.author}</span>
+            <span class="quote__detail">{main.detail}</span>
+          </figcaption>
+        </figure>
+      )
+    }
+
+    {
+      rest.length > 0 && (
+        <div class="quote__more" data-stagger="140">
+          {rest.map((t) => (
+            <figure class="quote quote--small" data-reveal="up">
+              <blockquote>
+                <p set:html={`„${richInline(t.quote)}”`} />
+              </blockquote>
+              <figcaption class="quote__by">
+                <span class="quote__name">— {t.author}</span>
+                <span class="quote__detail">{t.detail}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .quote--main {
+    position: relative;
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .quote__mark {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(7rem, 16vw, 13rem);
+    line-height: 0.6;
+    height: 0.45em;
+    color: var(--accent);
+  }
+  .quote__text {
+    font-size: clamp(2.1rem, 5.4vw, 5.4rem);
+    line-height: 1.08;
+    max-width: 22ch;
+  }
+  .quote__by {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.25rem;
+    margin-top: 2rem;
+  }
+  .quote__name {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .quote__detail {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .quote__more {
+    display: grid;
+    gap: 3rem;
+    margin-top: clamp(4rem, 9vw, 7rem);
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .quote--small p {
+    font-size: clamp(1.2rem, 1.05rem + 0.7vw, 1.6rem);
+    line-height: 1.4;
+    max-width: 34ch;
+  }
+  .quote--small .quote__by {
+    margin-top: 1.25rem;
+  }
+  @media (min-width: 64em) {
+    .quote--main {
+      padding-left: 8.333%;
+    }
+    .quote__mark {
+      position: absolute;
+      left: 0;
+      top: 0.15em;
+    }
+    .quote__more {
+      grid-template-columns: repeat(2, 1fr);
+      margin-left: 41.666%;
+    }
+    .quote__more:has(> :only-child) {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

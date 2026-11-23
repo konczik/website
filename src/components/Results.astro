@@ -1,0 +1,142 @@
+---
+import { site } from '../config/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { results } = site;
+const h = results.highlight;
+---
+
+<section class="results section" id="eredmenyek" aria-labelledby="results-title">
+  <div class="container">
+    <div class="results__head">
+      <SectionHeading id="results-title" kicker={results.kicker} title={results.title} size="lg" />
+    </div>
+
+    <dl class="results__stats" data-stagger="120">
+      {
+        results.stats.map((s) => (
+          <div class="stat" data-reveal="up">
+            <dt class="stat__label">{s.label}</dt>
+            <dd class="stat__value num">
+              {s.prefix && <span class="stat__affix">{s.prefix}</span>}
+              <span data-count={s.value} data-decimals={s.decimals ?? 0} data-count-delay="150">
+                {s.value.toFixed(s.decimals ?? 0)}
+              </span>
+              {s.suffix && <span class="stat__affix">{s.suffix}</span>}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div class="highlight">
+      <hr class="rule highlight__rule" data-reveal="line" />
+      <p class="highlight__value num">
+        <span class="sr-only">{`${h.prefix ?? ''}${h.value}${h.suffix ?? ''} ${h.label}, ${h.period}`}</span>
+        <span aria-hidden="true">
+          {h.prefix}<span data-count={h.value} data-decimals="0" data-count-delay="200">{h.value}</span>{h.suffix}
+        </span>
+      </p>
+      <div class="highlight__meta" data-reveal="up" data-delay="300">
+        <p class="highlight__period">{h.period}</p>
+        <p class="muted">{h.label}</p>
+      </div>
+    </div>
+
+    <p class="results__note muted" data-reveal="fade">{results.note}</p>
+  </div>
+</section>
+
+<style>
+  .results__stats {
+    display: grid;
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    border-top: 1px solid var(--line);
+  }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.9rem;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .stat__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stat__value {
+    display: flex;
+    align-items: baseline;
+    font-size: clamp(5rem, 15vw, 10.5rem);
+  }
+  .stat__affix {
+    color: var(--accent);
+  }
+
+  .highlight {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+    margin-top: clamp(4rem, 10vw, 8rem);
+  }
+  .highlight__rule {
+    background: var(--accent);
+    height: 2px;
+  }
+  .highlight__value {
+    font-size: clamp(6.5rem, 27vw, 24rem);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .highlight__meta {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .highlight__period {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .results__note {
+    margin-top: 3rem;
+    font-size: 0.78rem;
+  }
+
+  @media (min-width: 48em) {
+    .results__stats {
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+    .stat {
+      padding: 2.5rem 2rem 2.5rem 0;
+      border-bottom: 0;
+    }
+    .stat + .stat {
+      padding-left: 2rem;
+      border-left: 1px solid var(--line);
+    }
+    .stat__value {
+      font-size: clamp(4.5rem, 9.5vw, 10rem);
+    }
+  }
+  @media (min-width: 64em) {
+    .highlight {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      column-gap: 3rem;
+    }
+    .highlight__rule {
+      grid-column: 1 / -1;
+    }
+    .highlight__meta {
+      padding-bottom: 1.5rem;
+      text-align: right;
+    }
+  }
+</style>

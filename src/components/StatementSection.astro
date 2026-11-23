@@ -1,0 +1,42 @@
+---
+import { site } from '../config/site';
+import { richLines } from '../lib/text';
+
+const { statement } = site;
+---
+
+<section class="statement section section--light" id="statement" aria-labelledby="statement-title">
+  <div class="container statement__inner">
+    <p class="kicker" data-reveal="up">{statement.kicker}</p>
+    <h2 id="statement-title" class="display statement__text" data-reveal="mask" set:html={richLines(statement.text)} />
+    <hr class="rule statement__rule" data-reveal="line" data-delay="400" />
+  </div>
+</section>
+
+<style>
+  .statement {
+    padding-block: clamp(7rem, 18vw, 15rem);
+  }
+  .statement__inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+  .statement__text {
+    font-size: clamp(2.6rem, 8.4vw, 8.5rem);
+    line-height: 1.06;
+    max-width: 16ch;
+  }
+  .statement__rule {
+    width: min(100%, 28rem);
+    height: 2px;
+    background: var(--black);
+  }
+  @media (min-width: 64em) {
+    .statement__text {
+      padding-left: 8.333%;
+    }
+    .statement__rule {
+      margin-left: auto;
+    }
+  }
+</style>

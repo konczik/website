@@ -1,0 +1,39 @@
+---
+import { richLines } from '../lib/text';
+
+interface Props {
+  kicker?: string;
+  title: string;
+  /** Opcionális sorszám a kicker előtt, pl. "03". */
+  index?: string;
+  as?: 'h1' | 'h2' | 'h3';
+  size?: 'xxl' | 'xl' | 'lg' | 'md';
+  id?: string;
+  class?: string;
+}
+
+const { kicker, title, index, as: Tag = 'h2', size = 'lg', id, class: className = '' } = Astro.props;
+---
+
+<header class:list={['section-heading', className]}>
+  {
+    kicker && (
+      <p class="kicker" data-reveal="up">
+        {index && <span class="section-heading__index">{index}</span>}
+        {kicker}
+      </p>
+    )
+  }
+  <Tag id={id} class:list={['display', `display--${size}`]} data-reveal="mask" set:html={richLines(title)} />
+</header>
+
+<style>
+  .section-heading {
+    display: grid;
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .section-heading__index {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

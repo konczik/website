@@ -1,0 +1,149 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../config/site';
+import { richLines } from '../lib/text';
+
+const { about, brand } = site;
+---
+
+<section class="about section section--light" id="rolam" aria-labelledby="about-title">
+  <div class="container grid about__grid">
+    <figure class="about__portrait">
+      <div class="frame frame--editorial about__frame" data-reveal="image">
+        <Image
+          src={about.image}
+          alt={about.imageAlt}
+          widths={[480, 720, 960, 1280, 1600]}
+          sizes="(min-width: 64em) 42vw, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <figcaption class="about__caption" data-reveal="fade" data-delay="600">
+        <span>{brand.name}</span>
+        <span>{brand.role} · {brand.city}</span>
+      </figcaption>
+    </figure>
+
+    <div class="about__content">
+      <p class="kicker" data-reveal="up">{about.kicker}</p>
+      <h2 id="about-title" class="display about__title" data-reveal="mask" set:html={richLines(about.title)} />
+
+      <div class="about__story" data-stagger="120" data-delay="200">
+        {about.story.map((p) => <p data-reveal="up">{p}</p>)}
+      </div>
+
+      <dl class="about__facts" data-stagger="90">
+        {
+          about.facts.map((f) => (
+            <div class="about__fact" data-reveal="up">
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="about__signature" data-reveal="up" aria-hidden="true">— {about.signature}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    row-gap: clamp(3rem, 7vw, 5rem);
+  }
+  .about__portrait {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 1rem;
+  }
+  .about__frame {
+    aspect-ratio: 4 / 5;
+  }
+  .about__frame :global(img) {
+    object-position: 50% 30%;
+  }
+  .about__caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .about__caption span:first-child {
+    color: var(--ink);
+  }
+  .about__content {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+    align-content: start;
+  }
+  .about__title {
+    font-size: clamp(2.3rem, 5.2vw, 5rem);
+    line-height: 1.06;
+  }
+  .about__story {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 58ch;
+    font-size: 1.05rem;
+    color: #2b2926;
+  }
+  .about__story p:first-child {
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .about__facts {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+  .about__fact {
+    display: grid;
+    gap: 0.3rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .about__fact dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .about__fact dd {
+    font-weight: 500;
+  }
+  .about__signature {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 48em) {
+    .about__fact {
+      grid-template-columns: 11rem 1fr;
+      gap: 2rem;
+    }
+  }
+  @media (min-width: 64em) {
+    .about__portrait {
+      grid-column: 1 / 6;
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      align-self: start;
+    }
+    .about__frame {
+      aspect-ratio: 4 / 5.4;
+    }
+    .about__content {
+      grid-column: 7 / -1;
+      padding-top: 2rem;
+    }
+  }
+</style>

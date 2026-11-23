@@ -1,0 +1,115 @@
+---
+import { site, bookingHref } from '../config/site';
+import { pad2 } from '../lib/text';
+import SectionHeading from './SectionHeading.astro';
+import Button from './ui/Button.astro';
+
+const { process } = site;
+---
+
+<section class="process section" id="folyamat" aria-labelledby="process-title">
+  <div class="container">
+    <div class="process__head">
+      <SectionHeading id="process-title" kicker={process.kicker} title={process.title} size="xl" />
+    </div>
+
+    <ol class="process__steps" data-stagger="160">
+      {
+        process.steps.map((s, i) => (
+          <li class="step" data-reveal="up">
+            <span class="step__bar" aria-hidden="true" />
+            <span class="step__num num" aria-hidden="true">
+              {pad2(i + 1)}
+            </span>
+            <h3 class="step__title">
+              <span class="sr-only">{i + 1}. lépés: </span>
+              {s.title}
+            </h3>
+            <p class="muted">{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="process__cta" data-reveal="up">
+      <Button href={process.cta.href || bookingHref}>{process.cta.label}</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process__steps {
+    display: grid;
+    gap: 3.5rem;
+    margin-top: clamp(4rem, 9vw, 7rem);
+  }
+  .step {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    padding-top: 2rem;
+  }
+  .step__bar {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: var(--line);
+    overflow: hidden;
+  }
+  .step__bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1600ms var(--ease-in-out);
+    transition-delay: calc(var(--delay, 0ms) + 300ms);
+  }
+  .step:global(.is-in) .step__bar::after,
+  :global(html:not(.js)) .step__bar::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .step__bar::after {
+      transform: scaleX(1);
+      transition: none;
+    }
+  }
+  .step__num {
+    font-size: clamp(6.5rem, 16vw, 12rem);
+    color: var(--off-white);
+  }
+  .step:hover .step__num {
+    color: var(--accent);
+  }
+  .step__num {
+    transition: color 500ms var(--ease);
+  }
+  .step__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .step .muted {
+    max-width: 30ch;
+  }
+  .process__cta {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  @media (min-width: 48em) {
+    .process__steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1.5rem, 3vw, 3rem);
+    }
+    .step:nth-child(2) {
+      margin-top: 4rem;
+    }
+    .step:nth-child(3) {
+      margin-top: 8rem;
+    }
+  }
+</style>

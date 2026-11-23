@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import { site, bookingHref } from '../config/site';
+import { richLines } from '../lib/text';
+import Button from './ui/Button.astro';
+
+const { finalCta, contact, social } = site;
+const ctaHref = finalCta.primaryCta.href || bookingHref;
+---
+
+<section class="final" id="kapcsolat" aria-labelledby="final-title">
+  <div class="final__media" data-reveal="fade">
+    <Image
+      src={finalCta.image}
+      alt={finalCta.imageAlt}
+      widths={[640, 960, 1280, 1920, 2400]}
+      sizes="100vw"
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="final__shade"></div>
+  </div>
+
+  <div class="container final__inner">
+    <p class="kicker final__kicker" data-reveal="up">{finalCta.kicker}</p>
+    <h2 id="final-title" class="display display--xl final__title" data-reveal="mask" set:html={richLines(finalCta.title)} />
+    <div class="final__copy" data-stagger="120" data-delay="400">
+      <p class="lead" data-reveal="up">{finalCta.sub}</p>
+      <div data-reveal="up">
+        <Button href={ctaHref} class="final__btn">{finalCta.primaryCta.label}</Button>
+      </div>
+      <p class="final__note" data-reveal="up">{finalCta.note}</p>
+    </div>
+
+    <address class="final__contact" data-stagger="90">
+      <div data-reveal="up">
+        <span class="caption">E-mail</span>
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </div>
+      <div data-reveal="up">
+        <span class="caption">Telefon</span>
+        <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>
+      </div>
+      <div data-reveal="up">
+        <span class="caption">Social</span>
+        <span class="final__social">
+          {
+            social.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener">
+                {s.label}
+              </a>
+            ))
+          }
+        </span>
+      </div>
+    </address>
+  </div>
+</section>
+
+<style>
+  .final {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(8rem, 18vw, 14rem) clamp(3rem, 6vw, 4.5rem);
+    background: var(--black);
+  }
+  .final__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .final__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    filter: grayscale(1) contrast(1.1) brightness(0.7);
+  }
+  .final__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, var(--black) 0%, rgb(11 11 11 / 0.4) 30%, rgb(11 11 11 / 0.55) 65%, var(--black) 100%),
+      linear-gradient(90deg, rgb(11 11 11 / 0.75) 0%, rgb(11 11 11 / 0.1) 75%);
+  }
+  .final__inner {
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+  }
+  .final__title {
+    max-width: 13ch;
+  }
+  .final__copy {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+  .final__copy .lead {
+    max-width: 40ch;
+    color: rgb(242 239 233 / 0.88);
+  }
+  .final__note {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgb(242 239 233 / 0.7);
+  }
+  .final__contact {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: clamp(4rem, 10vw, 8rem);
+    padding-top: 2rem;
+    border-top: 1px solid rgb(242 239 233 / 0.18);
+    font-style: normal;
+  }
+  .final__contact > div {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .final__contact a {
+    width: fit-content;
+    font-size: 1.05rem;
+    transition: color 300ms;
+  }
+  .final__contact a:hover,
+  .final__contact a:focus-visible {
+    color: var(--accent);
+  }
+  .final__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+  @media (min-width: 48em) {
+    .final__contact {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 30em) {
+    .final__copy > div,
+    .final__copy :global(.final__btn) {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>

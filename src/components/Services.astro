@@ -1,0 +1,167 @@
+---
+import { Image } from 'astro:assets';
+import { site, bookingHref } from '../config/site';
+import { pad2 } from '../lib/text';
+import SectionHeading from './SectionHeading.astro';
+import Arrow from './ui/Arrow.astro';
+
+const { services } = site;
+---
+
+<section class="services section section--charcoal" id="szolgaltatasok" aria-labelledby="services-title">
+  <div class="container">
+    <SectionHeading id="services-title" kicker={services.kicker} title={services.title} size="xl" />
+
+    <ol class="services__list">
+      {
+        services.items.map((s, i) => {
+          const href = s.cta.href || bookingHref;
+          return (
+            <li class:list={['service', i % 2 === 1 && 'service--flip']} id={`szolgaltatas-${s.id}`}>
+              <figure class="service__media frame frame--editorial" data-reveal="image">
+                <Image
+                  src={s.image}
+                  alt={s.imageAlt}
+                  widths={[480, 720, 960, 1280, 1600]}
+                  sizes="(min-width: 64em) 55vw, 100vw"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+
+              <div class="service__body" data-stagger="100" data-delay="150">
+                <span class="service__num num" data-reveal="up" aria-hidden="true">
+                  {pad2(i + 1)}
+                </span>
+                <h3 class="display display--md service__title" data-reveal="up">
+                  {s.title}
+                </h3>
+                <p class="service__lead" data-reveal="up">
+                  {s.lead}
+                </p>
+                <p class="muted" data-reveal="up">
+                  {s.text}
+                </p>
+                <ul class="service__bullets" data-reveal="up">
+                  {s.bullets.map((b) => (
+                    <li>{b}</li>
+                  ))}
+                </ul>
+                <div class="service__foot" data-reveal="up">
+                  {s.price && <p class="service__price">{s.price}</p>}
+                  <a href={href} class="link-arrow">
+                    {s.cta.label}
+                    <span class="sr-only"> — {s.title}</span>
+                    <Arrow />
+                  </a>
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .services__list {
+    display: grid;
+    gap: clamp(5rem, 12vw, 10rem);
+    margin-top: clamp(4rem, 9vw, 8rem);
+  }
+  .service {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.4vw, 2.5rem);
+    row-gap: 2rem;
+    align-items: end;
+  }
+  .service__media {
+    grid-column: 1 / -1;
+    aspect-ratio: 4 / 5;
+  }
+  .service__body {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 1.1rem;
+    max-width: 30rem;
+  }
+  .service__num {
+    font-size: clamp(4.5rem, 12vw, 9rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(242 239 233 / 0.35);
+    margin-bottom: -0.5rem;
+  }
+  .service__lead {
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .service__bullets {
+    display: grid;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .service__bullets li {
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    color: rgb(242 239 233 / 0.82);
+  }
+  .service__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 0.75rem;
+  }
+  .service__price {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 48em) {
+    .service__media {
+      grid-column: 1 / 9;
+      aspect-ratio: 4 / 3;
+    }
+    .service__body {
+      grid-column: 5 / -1;
+    }
+    .service--flip .service__media {
+      grid-column: 5 / -1;
+    }
+    .service--flip .service__body {
+      grid-column: 1 / 8;
+    }
+  }
+  @media (min-width: 64em) {
+    .service {
+      align-items: center;
+    }
+    .service__media {
+      grid-column: 1 / 8;
+      grid-row: 1;
+      aspect-ratio: 4 / 4.6;
+    }
+    .service__body {
+      grid-column: 9 / -1;
+      grid-row: 1;
+      margin-top: 0;
+      padding: 0;
+      background: none;
+    }
+    .service--flip .service__media {
+      grid-column: 6 / -1;
+    }
+    .service--flip .service__body {
+      grid-column: 1 / 5;
+    }
+    .service:nth-child(2) .service__media {
+      aspect-ratio: 16 / 11;
+    }
+  }
+</style>
