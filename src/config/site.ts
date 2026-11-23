@@ -6,8 +6,9 @@
  *  kell módosítani. Minden szöveg, kép, szín, statisztika,
  *  szolgáltatás, ár, vélemény és link innen jön.
  *
- *  Sortörés a nagy headline-okban: használj "\n"-t.
- *  Akcentussal kiemelt szó: tedd *csillagok* közé.
+ *  Sortörés a nagy headline-okban: "\n".
+ *  Akcentus színű kiemelés: *csillagok* között. Takarékosan —
+ *  az akcentus a CTA-ké és a fontos számoké.
  */
 import type { ImageMetadata } from 'astro';
 
@@ -29,7 +30,7 @@ export interface Cta {
 export interface Stat {
   /** Számérték, ami count-up animációt kap. */
   value: number;
-  /** Tizedesjegyek száma (pl. 4.9 → 1). */
+  /** Tizedesjegyek száma (pl. 4,9 → 1). */
   decimals?: number;
   prefix?: string;
   suffix?: string;
@@ -39,6 +40,8 @@ export interface Stat {
 export interface Service {
   id: string;
   title: string;
+  /** Kinek / hol — rövid formátum leírás a cím fölött. */
+  format: string;
   lead: string;
   text: string;
   bullets: string[];
@@ -52,7 +55,7 @@ export interface Transformation {
   name: string;
   age: number;
   goal: string;
-  result: { value: string; unit: string; period: string };
+  result: { value: string; unit: string; detail: string };
   quote: string;
   image: ImageMetadata;
   imageAlt: string;
@@ -76,6 +79,8 @@ export const site = {
     city: 'Budapest',
     locale: 'hu_HU',
     lang: 'hu',
+    /** Számformázás (tizedesvessző stb.). */
+    numberLocale: 'hu-HU',
   },
 
   /* ── Színek ─────────────────────────────────────────────── */
@@ -95,8 +100,8 @@ export const site = {
   seo: {
     title: 'Nagy Bence — Személyi edző Budapesten | Personal Training & Online Coaching',
     description:
-      'Személyre szabott edzés, követhető rendszer és valódi eredmények. Személyi edzés, online coaching és teljesítményfejlesztés Budapesten — kérj ingyenes konzultációt.',
-    ogImageAlt: 'Nagy Bence személyi edző — Építsük fel a legerősebb éned.',
+      'Személyre szabott edzés, követhető rendszer és valódi eredmények. Személyi edzés, online coaching és teljesítményfejlesztés Budapesten. Kérj ingyenes konzultációt.',
+    ogImageAlt: 'Nagy Bence személyi edző: Építsük fel a legerősebb éned.',
   },
 
   /* ── Kapcsolat & social ──────────────────────────────────── */
@@ -129,36 +134,33 @@ export const site = {
     eyebrow: 'Personal Training · Performance · Lifestyle',
     headline: 'Építsük fel\na *legerősebb*\néned.',
     sub: 'Személyre szabott edzés, követhető rendszer és valódi eredmények — a céljaidhoz igazítva.',
+    /** Ki vagyok, egy mondatban — az első 5 másodperc bizalmi eleme. */
+    intro: 'Nagy Bence vagyok, budapesti személyi edző. 8 év alatt több mint 150 ügyfelemnek segítettem erősebbé válni.',
     primaryCta: { label: 'Kezdjük el', href: '#kapcsolat' },
     secondaryCta: { label: 'Ismerj meg', href: '#rolam' },
     image: heroImg,
     imageAlt: 'Sportoló súlyzós felhúzásra készül egy sötét edzőteremben, drámai fényben',
-    /** Rövid "proof" sor a hero alján. */
-    proof: [
-      { value: '150+', label: 'ügyfél' },
-      { value: '8+ év', label: 'tapasztalat' },
-      { value: '4.9/5', label: 'értékelés' },
-    ],
   },
 
   /* ── Statement ───────────────────────────────────────────── */
   statement: {
-    kicker: 'Filozófia',
-    text: 'A fejlődés nem\nmotiváció kérdése.\n*Hanem rendszeré.*',
+    /** Az első rész kisebb, a második (punchline) óriási. */
+    setup: 'A fejlődés nem\nmotiváció kérdése.',
+    punchline: 'Hanem\nrendszeré.',
   },
 
   /* ── Probléma → megoldás ─────────────────────────────────── */
   problem: {
-    kicker: 'Ismerős?',
+    intro: 'Ismerős valamelyik?',
     items: [
       'Nem tudod, mit eddz?',
       'Nem látod a fejlődést?',
       'Folyton újrakezded?',
       'Nincs rendszered?',
     ],
-    solution: 'Én segítek *rendszert építeni*\na céljaid köré.',
+    solution: 'Én segítek rendszert építeni\na céljaid köré.',
     solutionText:
-      'Világos terv, mérhető haladás és valaki, aki számon tart. Nem több akaraterő kell — hanem egy struktúra, ami akkor is működik, amikor nincs kedved.',
+      'Világos terv, mérhető haladás és valaki, aki számon tart. Nem több akaraterő kell, hanem egy struktúra, ami akkor is működik, amikor nincs kedved.',
     cta: { label: 'Megnézem, hogyan működik', href: '#folyamat' },
     image: problemImg,
     imageAlt: 'Fekete-fehér kép egy húzódzkodó sportoló izmos hátáról',
@@ -166,15 +168,15 @@ export const site = {
 
   /* ── Szolgáltatások ──────────────────────────────────────── */
   services: {
-    kicker: 'Szolgáltatások',
-    title: 'Három út.\n*Egy rendszer.*',
+    title: 'Három út.\nEgy rendszer.',
     items: [
       {
         id: 'personal',
         title: 'Personal Training',
+        format: 'Személyesen, Budapesten',
         lead: 'Személyes, célorientált edzés.',
-        text: 'Minden alkalom a te céljaidra épül: technika, terhelés és tempó — melletted, valós időben korrigálva.',
-        bullets: ['Heti 1–3 személyes alkalom', 'Felmérés és mérések', 'Táplálkozási alapok'],
+        text: 'Minden alkalom a te céljaidra épül: technika, terhelés és tempó, melletted, valós időben korrigálva.',
+        bullets: ['Heti 1–3 személyes alkalom', 'Felmérés és rendszeres mérések', 'Táplálkozási alapok'],
         price: '18 000 Ft-tól / alkalom',
         image: servicePersonal,
         imageAlt: 'Edző korrigálja ügyfele fekvőtámasz technikáját az edzőteremben',
@@ -183,8 +185,9 @@ export const site = {
       {
         id: 'online',
         title: 'Online Coaching',
+        format: 'Online, bárhonnan',
         lead: 'Strukturált online támogatás.',
-        text: 'Edzésterv, heti check-in és folyamatos visszajelzés — bárhol edzel, a rendszered veled van.',
+        text: 'Edzésterv, heti check-in és folyamatos visszajelzés. Bárhol edzel, a rendszered veled van.',
         bullets: ['Egyéni edzésterv appban', 'Heti check-in és videóelemzés', 'Chat támogatás'],
         price: '39 000 Ft / hó',
         image: serviceOnline,
@@ -194,8 +197,9 @@ export const site = {
       {
         id: 'performance',
         title: 'Performance',
+        format: 'Sportolóknak és ambiciózus amatőröknek',
         lead: 'Erőnlét, teljesítmény és hosszú távú fejlődés.',
-        text: 'Sportolóknak és ambiciózus amatőröknek: erő, robbanékonyság és terhelhetőség periodizált programmal.',
+        text: 'Erő, robbanékonyság és terhelhetőség periodizált programmal, mérhető teljesítménytesztekkel.',
         bullets: ['Periodizált erőprogram', 'Teljesítménytesztek', 'Sérülésmegelőzés'],
         price: 'Egyedi ajánlat',
         image: servicePerformance,
@@ -207,74 +211,71 @@ export const site = {
 
   /* ── Eredmények (statisztikák) ───────────────────────────── */
   results: {
-    kicker: 'Eredmények',
-    title: 'Számok, amik\n*nem hazudnak.*',
+    title: 'Számok, amik\nnem hazudnak.',
     stats: [
-      { value: 150, prefix: '+', label: 'Ügyfél' },
-      { value: 8, suffix: '+', label: 'Év tapasztalat' },
-      { value: 4.9, decimals: 1, suffix: '/5', label: 'Ügyfél értékelés' },
+      { value: 150, prefix: '+', label: 'ügyfél' },
+      { value: 8, suffix: '+', label: 'év tapasztalat' },
+      { value: 4.9, decimals: 1, suffix: '/5', label: 'átlagos ügyfélértékelés' },
     ] satisfies Stat[],
     highlight: {
       value: 12,
       prefix: '−',
       suffix: ' kg',
-      label: 'átlagos változás',
-      period: '16 hét alatt',
+      label: 'Átlagos testsúlyváltozás 16 hét alatt, fogyási célú ügyfeleknél.',
     },
-    note: '* Az eredmények egyéniek; a számok a 2024–2026 közötti ügyfélkör átlagai.',
+    note: 'Az eredmények egyéniek. A számok a 2024 és 2026 közötti ügyfélkör átlagai.',
   },
 
   /* ── Transzformációk ─────────────────────────────────────── */
   transformations: {
-    kicker: 'Ügyféltörténetek',
-    title: 'Valódi emberek.\n*Valódi változás.*',
+    title: 'Valódi emberek.\nValódi változás.',
     items: [
       {
         name: 'Réka',
         age: 29,
         goal: 'Erő és testkompozíció',
-        result: { value: '−9', unit: 'kg', period: '14 hét' },
+        result: { value: '−9', unit: 'kg', detail: '14 hét alatt' },
         quote:
-          'Életemben először nem a mérleg miatt edzek. Erősebb vagyok, mint valaha — és ez meg is látszik.',
+          'Életemben először nem a mérleg miatt edzek. Erősebb vagyok, mint valaha, és ez meg is látszik.',
         image: client1,
         imageAlt: 'Fekete-fehér portré Rékáról edzés közben',
       },
       {
         name: 'Dávid',
         age: 36,
-        goal: 'Visszatérés sérülés után',
-        result: { value: '+40', unit: 'kg', period: 'guggolás · 20 hét' },
+        goal: 'Visszatérés térdműtét után',
+        result: { value: '+40', unit: 'kg', detail: 'guggolásban, 20 hét alatt' },
         quote:
-          'Térdműtét után féltem a súlyoktól. Bence lépésről lépésre építette vissza a bizalmamat — és az erőmet.',
+          'A műtét után féltem a súlyoktól. Bence lépésről lépésre építette vissza a bizalmamat, és az erőmet.',
         image: client2,
         imageAlt: 'Dávid kettlebellel edz egy sötét edzőteremben',
       },
     ] satisfies Transformation[],
+    /** Mini CTA a fejezet végén. */
+    cta: { label: 'Te leszel a következő? Kérj konzultációt', href: '#kapcsolat' },
   },
 
   /* ── Rólam ──────────────────────────────────────────────── */
   about: {
-    kicker: 'Rólam',
-    title: 'Nem csak edzéstervet adok.\n*Rendszert adok a fejlődésedhez.*',
+    title: 'Nem csak edzéstervet adok.\nRendszert adok a fejlődésedhez.',
     story: [
-      'Versenysportolóként tanultam meg, hogy a tehetség csak a kezdet. Ami igazán számít, az a rendszer: mit csinálsz hétfőn, amikor nincs kedved — és mit mérsz, hogy tudd, jó irányba mész.',
+      'Versenysportolóként tanultam meg, hogy a tehetség csak a kezdet. Ami igazán számít, az a rendszer: mit csinálsz hétfőn, amikor nincs kedved, és mit mérsz, hogy tudd, jó irányba mész.',
       'Az elmúlt 8 évben több mint 150 ügyféllel dolgoztam: irodai munkát végző kezdőkkel, sérülésből visszatérőkkel és versenysportolókkal. A módszer mindenkinél ugyanaz: felmérés, terv, mérés, finomhangolás.',
     ],
     image: aboutPortrait,
     imageAlt: 'Nagy Bence személyi edző portréja az edzőteremben',
     facts: [
-      { label: 'Tapasztalat', value: '8+ év edzői munka, korábbi versenysportoló' },
-      { label: 'Specializáció', value: 'Erőfejlesztés, testkompozíció, rehab utáni visszatérés' },
+      { label: 'Tapasztalat', value: '8+ év edzői munka, előtte versenysportoló' },
+      { label: 'Specializáció', value: 'Erőfejlesztés, testkompozíció, visszatérés sérülés után' },
       { label: 'Filozófia', value: 'Kevesebb motiváció, több rendszer. Mérj, ne találgass.' },
-      { label: 'Végzettség', value: 'TF személyi edző · NSCA-CSCS · funkcionális tréner' },
+      { label: 'Végzettség', value: 'TF személyi edző, NSCA-CSCS, funkcionális tréner' },
     ],
     signature: 'Bence',
   },
 
   /* ── Folyamat ───────────────────────────────────────────── */
   process: {
-    kicker: 'Hogyan működik',
-    title: 'Három lépés.\n*Nulla találgatás.*',
+    title: 'Három lépés.\nNulla találgatás.',
     steps: [
       { title: 'Felmérés', text: 'Megismerjük a céljaidat és jelenlegi állapotodat.' },
       { title: 'Terv', text: 'Felépítjük a személyre szabott rendszeredet.' },
@@ -285,28 +286,28 @@ export const site = {
 
   /* ── Vélemények ─────────────────────────────────────────── */
   testimonials: {
-    kicker: 'Vélemények',
+    /** Képernyőolvasóknak és SEO-nak (vizuálisan rejtett szekciócím). */
+    title: 'Ügyfélvélemények',
     items: [
       {
-        quote: 'Végre nem egy újabb edzéstervet kaptam.\nHanem egy rendszert, amit *tényleg tudok követni.*',
+        quote: 'Végre nem egy újabb edzéstervet kaptam.\nHanem egy rendszert, amit tényleg tudok követni.',
         author: 'Anna',
-        detail: '32 · Online Coaching',
+        detail: '32 éves, online coaching',
       },
       {
-        quote: 'Fél év alatt többet fejlődtem, mint előtte öt év egyedül.',
+        quote: 'Fél év alatt többet fejlődtem, mint előtte öt év alatt egyedül.',
         author: 'Márton',
-        detail: '41 · Personal Training',
+        detail: '41 éves, personal training',
       },
     ] satisfies Testimonial[],
   },
 
   /* ── Záró CTA ───────────────────────────────────────────── */
   finalCta: {
-    kicker: 'Első lépés',
-    title: 'Készen állsz\na *következő szintre?*',
+    title: 'Készen állsz\na következő\nszintre?',
     sub: 'Az első lépés egyszerű. Beszéljük át, honnan indulsz és hová szeretnél eljutni.',
     primaryCta: { label: 'Kezdjük el', href: '' },
-    note: 'Ingyenes, 20 perces konzultáció · Nincs elköteleződés',
+    note: 'Az első konzultáció ingyenes, 20 perces, és nem kötelez semmire.',
     image: finalCtaImg,
     imageAlt: 'Fekete-fehér kép egy guggolásra készülő sportoló hátáról, rúddal a vállán',
   },

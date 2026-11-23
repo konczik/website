@@ -179,28 +179,12 @@ ol {
   font-style: normal;
   color: var(--accent);
 }
-.section--light .display .accent {
-  color: var(--black);
-  -webkit-text-stroke: 0;
-  background: linear-gradient(transparent 62%, var(--accent) 62%, var(--accent) 90%, transparent 90%);
-  padding-inline: 0.04em;
-}
 
+/* Kis, mondatszerű bevezető szöveg (nem csupa nagybetűs címke) */
 .kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.85rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  font-weight: 500;
   color: var(--ink-muted);
-}
-.kicker::before {
-  content: '';
-  width: 2.25rem;
-  height: 1px;
-  background: var(--accent);
 }
 .lead {
   font-size: clamp(1.075rem, 1rem + 0.45vw, 1.3rem);
@@ -242,13 +226,12 @@ ol {
   justify-content: center;
   gap: 0.9rem;
   min-height: 3.5rem;
-  padding: 1rem 1.6rem 1rem 1.75rem;
+  padding: 1rem 2rem;
   background: var(--btn-bg);
   color: var(--btn-fg);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
   overflow: hidden;
   isolation: isolate;
   transition: color 450ms var(--ease);
@@ -272,13 +255,6 @@ ol {
 .btn:focus-visible {
   color: var(--black);
 }
-.btn__arrow {
-  width: 1.1rem;
-  transition: transform 450ms var(--ease);
-}
-.btn:hover .btn__arrow {
-  transform: translateX(4px);
-}
 .btn--ghost {
   --btn-bg: transparent;
   --btn-fg: var(--ink);
@@ -296,30 +272,23 @@ ol {
   color: var(--off-white);
 }
 
-.link-arrow {
+/* Szöveges link aláhúzással — min. 44px magas kattintási felület */
+.text-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding-block: 0.4rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
-  transition: background-size 500ms var(--ease), color 300ms;
+  min-height: 2.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 0.55rem) / 100% 1px no-repeat;
+  transition:
+    background-size 500ms var(--ease),
+    color 300ms;
 }
-.link-arrow:hover,
-.link-arrow:focus-visible {
+.text-link:hover,
+.text-link:focus-visible {
   color: var(--accent);
   background-size: 0% 1px;
-  background-position: 100% 100%;
-}
-.link-arrow svg {
-  width: 1rem;
-  transition: transform 450ms var(--ease);
-}
-.link-arrow:hover svg {
-  transform: translateX(4px);
+  background-position: 100% calc(100% - 0.55rem);
 }
 
 .rule {
@@ -349,9 +318,7 @@ ol {
   }
 }
 .caption {
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-size: 0.875rem;
   color: var(--ink-muted);
 }
 

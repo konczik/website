@@ -47,7 +47,7 @@ const year = new Date().getFullYear();
             </li>
           ))
         }
-        <li><a href="#top">Vissza fel ↑</a></li>
+        <li><a href="#top">Vissza az oldal tetejére</a></li>
       </ul>
     </div>
   </div>
@@ -72,11 +72,14 @@ const year = new Date().getFullYear();
   }
   .footer__links {
     display: grid;
-    gap: 0.6rem;
+    gap: 0;
     font-size: 0.9rem;
     color: rgb(242 239 233 / 0.75);
   }
   .footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
     transition: color 300ms;
   }
   .footer a:hover,

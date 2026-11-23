@@ -1,18 +1,16 @@
 ---
 import { Image } from 'astro:assets';
 import { site, bookingHref } from '../config/site';
-import { pad2 } from '../lib/text';
 import SectionHeading from './SectionHeading.astro';
-import Arrow from './ui/Arrow.astro';
 
 const { services } = site;
 ---
 
 <section class="services section section--charcoal" id="szolgaltatasok" aria-labelledby="services-title">
   <div class="container">
-    <SectionHeading id="services-title" kicker={services.kicker} title={services.title} size="xl" />
+    <SectionHeading id="services-title" title={services.title} size="xl" />
 
-    <ol class="services__list">
+    <ul class="services__list">
       {
         services.items.map((s, i) => {
           const href = s.cta.href || bookingHref;
@@ -30,18 +28,14 @@ const { services } = site;
               </figure>
 
               <div class="service__body" data-stagger="100" data-delay="150">
-                <span class="service__num num" data-reveal="up" aria-hidden="true">
-                  {pad2(i + 1)}
-                </span>
-                <h3 class="display display--md service__title" data-reveal="up">
-                  {s.title}
-                </h3>
-                <p class="service__lead" data-reveal="up">
-                  {s.lead}
-                </p>
-                <p class="muted" data-reveal="up">
-                  {s.text}
-                </p>
+                <div class="service__intro" data-reveal="up">
+                  <p class="service__format">{s.format}</p>
+                  <h3 class="display display--md service__title">{s.title}</h3>
+                </div>
+                <div class="service__copy" data-reveal="up">
+                  <p class="service__lead">{s.lead}</p>
+                  <p class="muted">{s.text}</p>
+                </div>
                 <ul class="service__bullets" data-reveal="up">
                   {s.bullets.map((b) => (
                     <li>{b}</li>
@@ -49,10 +43,9 @@ const { services } = site;
                 </ul>
                 <div class="service__foot" data-reveal="up">
                   {s.price && <p class="service__price">{s.price}</p>}
-                  <a href={href} class="link-arrow">
+                  <a href={href} class="text-link">
                     {s.cta.label}
-                    <span class="sr-only"> — {s.title}</span>
-                    <Arrow />
+                    <span class="sr-only"> ({s.title})</span>
                   </a>
                 </div>
               </div>
@@ -60,7 +53,7 @@ const { services } = site;
           );
         })
       }
-    </ol>
+    </ul>
   </div>
 </section>
 
@@ -87,11 +80,14 @@ const { services } = site;
     gap: 1.1rem;
     max-width: 30rem;
   }
-  .service__num {
-    font-size: clamp(4.5rem, 12vw, 9rem);
-    color: transparent;
-    -webkit-text-stroke: 1px rgb(242 239 233 / 0.35);
-    margin-bottom: -0.5rem;
+  .service__intro,
+  .service__copy {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .service__format {
+    font-size: 0.95rem;
+    color: var(--accent);
   }
   .service__lead {
     font-size: 1.15rem;

@@ -2,15 +2,15 @@
 import { site } from '../config/site';
 import SectionHeading from './SectionHeading.astro';
 
-const { results } = site;
+const { results, brand } = site;
 const h = results.highlight;
+const fmt = (v: number, d = 0) =>
+  new Intl.NumberFormat(brand.numberLocale, { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
 ---
 
-<section class="results section" id="eredmenyek" aria-labelledby="results-title">
+<section class="results section" id="eredmenyek" aria-labelledby="results-title" data-locale={brand.numberLocale}>
   <div class="container">
-    <div class="results__head">
-      <SectionHeading id="results-title" kicker={results.kicker} title={results.title} size="lg" />
-    </div>
+    <SectionHeading id="results-title" title={results.title} size="lg" />
 
     <dl class="results__stats" data-stagger="120">
       {
@@ -20,7 +20,7 @@ const h = results.highlight;
             <dd class="stat__value num">
               {s.prefix && <span class="stat__affix">{s.prefix}</span>}
               <span data-count={s.value} data-decimals={s.decimals ?? 0} data-count-delay="150">
-                {s.value.toFixed(s.decimals ?? 0)}
+                {fmt(s.value, s.decimals ?? 0)}
               </span>
               {s.suffix && <span class="stat__affix">{s.suffix}</span>}
             </dd>
@@ -29,19 +29,15 @@ const h = results.highlight;
       }
     </dl>
 
-    <div class="highlight">
-      <hr class="rule highlight__rule" data-reveal="line" />
+    <figure class="highlight">
       <p class="highlight__value num">
-        <span class="sr-only">{`${h.prefix ?? ''}${h.value}${h.suffix ?? ''} ${h.label}, ${h.period}`}</span>
+        <span class="sr-only">{`${h.prefix ?? ''}${h.value}${h.suffix ?? ''}`}</span>
         <span aria-hidden="true">
-          {h.prefix}<span data-count={h.value} data-decimals="0" data-count-delay="200">{h.value}</span>{h.suffix}
+          {h.prefix}<span data-count={h.value} data-decimals="0" data-count-delay="200">{fmt(h.value)}</span>{h.suffix}
         </span>
       </p>
-      <div class="highlight__meta" data-reveal="up" data-delay="300">
-        <p class="highlight__period">{h.period}</p>
-        <p class="muted">{h.label}</p>
-      </div>
-    </div>
+      <figcaption class="highlight__label" data-reveal="up" data-delay="300">{h.label}</figcaption>
+    </figure>
 
     <p class="results__note muted" data-reveal="fade">{results.note}</p>
   </div>
@@ -56,15 +52,12 @@ const h = results.highlight;
   .stat {
     display: flex;
     flex-direction: column-reverse;
-    gap: 0.9rem;
+    gap: 0.75rem;
     padding-block: 2rem;
     border-bottom: 1px solid var(--line);
   }
   .stat__label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: 1rem;
     color: var(--muted);
   }
   .stat__value {
@@ -77,35 +70,25 @@ const h = results.highlight;
   }
 
   .highlight {
-    position: relative;
     display: grid;
     gap: 1.25rem;
-    margin-top: clamp(4rem, 10vw, 8rem);
-  }
-  .highlight__rule {
-    background: var(--accent);
-    height: 2px;
+    margin-top: clamp(4.5rem, 11vw, 9rem);
   }
   .highlight__value {
     font-size: clamp(6.5rem, 27vw, 24rem);
-    line-height: 0.8;
+    line-height: 0.82;
     letter-spacing: -0.02em;
     color: var(--accent);
     white-space: nowrap;
   }
-  .highlight__meta {
-    display: grid;
-    gap: 0.25rem;
-  }
-  .highlight__period {
-    font-family: var(--font-display);
-    font-size: clamp(1.6rem, 3vw, 2.6rem);
-    text-transform: uppercase;
-    line-height: 1;
+  .highlight__label {
+    max-width: 30ch;
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.45;
   }
   .results__note {
-    margin-top: 3rem;
-    font-size: 0.78rem;
+    margin-top: 3.5rem;
+    font-size: 0.85rem;
   }
 
   @media (min-width: 48em) {
@@ -127,15 +110,13 @@ const h = results.highlight;
   }
   @media (min-width: 64em) {
     .highlight {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: auto 1fr;
       align-items: end;
       column-gap: 3rem;
     }
-    .highlight__rule {
-      grid-column: 1 / -1;
-    }
-    .highlight__meta {
-      padding-bottom: 1.5rem;
+    .highlight__label {
+      padding-bottom: 2rem;
+      justify-self: end;
       text-align: right;
     }
   }

@@ -43,19 +43,7 @@ const { hero, brand } = site;
         </div>
       </div>
 
-      <dl class="hero__proof" data-stagger="100" data-delay="900">
-        {
-          hero.proof.map((p) => (
-            <div data-reveal="up">
-              <dt class="sr-only">{p.label}</dt>
-              <dd>
-                <span class="hero__proof-value">{p.value}</span>
-                <span class="hero__proof-label" aria-hidden="true">{p.label}</span>
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
+      <p class="hero__intro" data-reveal="fade" data-delay="1000">{hero.intro}</p>
     </div>
   </div>
 
@@ -64,7 +52,7 @@ const { hero, brand } = site;
     <span class="hero__scroll-line" aria-hidden="true"></span>
   </a>
 
-  <p class="hero__vertical" aria-hidden="true">{brand.city} — {brand.role}</p>
+
 </section>
 
 <style>
@@ -163,31 +151,14 @@ const { hero, brand } = site;
     gap: 0.75rem;
   }
 
-  .hero__proof {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    justify-content: start;
-    gap: clamp(1.5rem, 4vw, 3.5rem);
+  .hero__intro {
+    max-width: 34ch;
     padding-top: 1.5rem;
     border-top: 1px solid rgb(242 239 233 / 0.18);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: rgb(242 239 233 / 0.72);
   }
-  .hero__proof dd {
-    display: grid;
-    gap: 0.35rem;
-  }
-  .hero__proof-value {
-    font-family: var(--font-display);
-    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
-    line-height: 1;
-  }
-  .hero__proof-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgb(242 239 233 / 0.65);
-  }
-
   /* Scroll indicator */
   .hero__scroll {
     position: absolute;
@@ -237,20 +208,6 @@ const { hero, brand } = site;
     }
   }
 
-  .hero__vertical {
-    position: absolute;
-    right: var(--gutter);
-    top: 50%;
-    display: none;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgb(242 239 233 / 0.55);
-    writing-mode: vertical-rl;
-    transform: translateY(-50%) rotate(180deg);
-  }
-
   @media (min-width: 48em) {
     .hero__scroll {
       display: flex;
@@ -264,20 +221,16 @@ const { hero, brand } = site;
       grid-template-columns: 1fr auto;
       gap: 4rem;
     }
-    .hero__proof {
+    .hero__intro {
       border-top: 0;
       padding-top: 0;
-      padding-left: 2.5rem;
+      padding-left: 2rem;
       border-left: 1px solid rgb(242 239 233 / 0.18);
-    }
-    .hero__vertical {
-      display: block;
     }
   }
   @media (max-width: 30em) {
     .hero__ctas :global(.btn) {
       flex: 1 1 100%;
-      justify-content: space-between;
     }
   }
 </style>

@@ -31,8 +31,16 @@ function applyStagger() {
 /* ── Count-up ────────────────────────────────────────────────── */
 const easeOutExpo = (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
 
+const locale = document.querySelector<HTMLElement>('[data-locale]')?.dataset.locale || document.documentElement.lang || undefined;
+const formatters = new Map<number, Intl.NumberFormat>();
+
 function formatValue(value: number, decimals: number) {
-  return value.toFixed(decimals);
+  let f = formatters.get(decimals);
+  if (!f) {
+    f = new Intl.NumberFormat(locale, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    formatters.set(decimals, f);
+  }
+  return f.format(value);
 }
 
 function prepareCounter(el: HTMLElement) {

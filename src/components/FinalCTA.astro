@@ -22,7 +22,6 @@ const ctaHref = finalCta.primaryCta.href || bookingHref;
   </div>
 
   <div class="container final__inner">
-    <p class="kicker final__kicker" data-reveal="up">{finalCta.kicker}</p>
     <h2 id="final-title" class="display display--xl final__title" data-reveal="mask" set:html={richLines(finalCta.title)} />
     <div class="final__copy" data-stagger="120" data-delay="400">
       <p class="lead" data-reveal="up">{finalCta.sub}</p>
@@ -32,17 +31,17 @@ const ctaHref = finalCta.primaryCta.href || bookingHref;
       <p class="final__note" data-reveal="up">{finalCta.note}</p>
     </div>
 
-    <address class="final__contact" data-stagger="90">
-      <div data-reveal="up">
+    <address class="final__contact" data-reveal="up">
+      <div>
         <span class="caption">E-mail</span>
         <a href={`mailto:${contact.email}`}>{contact.email}</a>
       </div>
-      <div data-reveal="up">
+      <div>
         <span class="caption">Telefon</span>
         <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>
       </div>
-      <div data-reveal="up">
-        <span class="caption">Social</span>
+      <div>
+        <span class="caption">Közösségi média</span>
         <span class="final__social">
           {
             social.map((s) => (
@@ -101,10 +100,8 @@ const ctaHref = finalCta.primaryCta.href || bookingHref;
     color: rgb(242 239 233 / 0.88);
   }
   .final__note {
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgb(242 239 233 / 0.7);
+    font-size: 0.95rem;
+    color: rgb(242 239 233 / 0.72);
   }
   .final__contact {
     display: grid;
@@ -141,7 +138,6 @@ const ctaHref = finalCta.primaryCta.href || bookingHref;
     .final__copy > div,
     .final__copy :global(.final__btn) {
       width: 100%;
-      justify-content: space-between;
     }
   }
 </style>

@@ -21,22 +21,21 @@ const { about, brand } = site;
       </div>
       <figcaption class="about__caption" data-reveal="fade" data-delay="600">
         <span>{brand.name}</span>
-        <span>{brand.role} · {brand.city}</span>
+        <span>{brand.role}, {brand.city}</span>
       </figcaption>
     </figure>
 
     <div class="about__content">
-      <p class="kicker" data-reveal="up">{about.kicker}</p>
       <h2 id="about-title" class="display about__title" data-reveal="mask" set:html={richLines(about.title)} />
 
       <div class="about__story" data-stagger="120" data-delay="200">
         {about.story.map((p) => <p data-reveal="up">{p}</p>)}
       </div>
 
-      <dl class="about__facts" data-stagger="90">
+      <dl class="about__facts" data-reveal="up">
         {
           about.facts.map((f) => (
-            <div class="about__fact" data-reveal="up">
+            <div class="about__fact">
               <dt>{f.label}</dt>
               <dd>{f.value}</dd>
             </div>
@@ -68,13 +67,11 @@ const { about, brand } = site;
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-size: 0.9rem;
     color: var(--ink-muted);
   }
   .about__caption span:first-child {
+    font-weight: 600;
     color: var(--ink);
   }
   .about__content {
@@ -110,10 +107,8 @@ const { about, brand } = site;
     border-bottom: 1px solid var(--line);
   }
   .about__fact dt {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--ink-muted);
   }
   .about__fact dd {

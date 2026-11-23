@@ -1,8 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { site } from '../config/site';
-import { richLines, pad2 } from '../lib/text';
-import Arrow from './ui/Arrow.astro';
+import { richLines } from '../lib/text';
 
 const { problem } = site;
 ---
@@ -10,17 +9,17 @@ const { problem } = site;
 <section class="problem section" id="problema" aria-labelledby="problem-title">
   <div class="container grid problem__grid">
     <div class="problem__questions">
-      <p class="kicker" data-reveal="up">{problem.kicker}</p>
-      <ol class="problem__list" data-stagger="110">
+      <p class="kicker" data-reveal="up">{problem.intro}</p>
+      <!-- Vizuális storytelling: a kérdéseket egymás után áthúzza egy vonal -->
+      <ul class="problem__list" data-stagger="260" data-delay="150">
         {
-          problem.items.map((q, i) => (
+          problem.items.map((q) => (
             <li class="problem__item" data-reveal="up">
-              <span class="problem__num">{pad2(i + 1)}</span>
               <span class="problem__q">{q}</span>
             </li>
           ))
         }
-      </ol>
+      </ul>
     </div>
 
     <figure class="problem__figure frame frame--editorial" data-reveal="image">
@@ -37,9 +36,8 @@ const { problem } = site;
     <div class="problem__solution">
       <h2 id="problem-title" class="display display--lg" data-reveal="mask" set:html={richLines(problem.solution)} />
       <p class="lead muted" data-reveal="up" data-delay="200">{problem.solutionText}</p>
-      <a href={problem.cta.href} class="link-arrow" data-reveal="up" data-delay="300">
+      <a href={problem.cta.href} class="text-link" data-reveal="up" data-delay="300">
         {problem.cta.label}
-        <Arrow />
       </a>
     </div>
   </div>
@@ -56,38 +54,54 @@ const { problem } = site;
   }
   .problem__questions {
     display: grid;
-    gap: 2rem;
+    gap: 1.5rem;
     align-content: start;
   }
-  .problem__list {
-    border-top: 1px solid var(--line);
-  }
   .problem__item {
-    display: flex;
-    align-items: baseline;
-    gap: clamp(1rem, 2vw, 2rem);
-    padding-block: clamp(1rem, 2.2vw, 1.6rem);
-    border-bottom: 1px solid var(--line);
-  }
-  .problem__num {
-    flex: none;
-    width: 2rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-    font-variant-numeric: tabular-nums;
+    padding-block: clamp(0.35rem, 1vw, 0.6rem);
   }
   .problem__q {
+    position: relative;
+    display: inline-block;
     font-family: var(--font-display);
-    font-size: clamp(1.8rem, 4.4vw, 3.6rem);
-    line-height: 1;
+    font-size: clamp(2.1rem, 5.4vw, 4.6rem);
+    line-height: 1.08;
     text-transform: uppercase;
-    color: rgb(242 239 233 / 0.4);
-    transition: color 500ms var(--ease);
-  }
-  .problem__item:hover .problem__q {
     color: var(--off-white);
+    transition: color 900ms var(--ease);
+  }
+  /* Áthúzó vonal */
+  .problem__q::after {
+    content: '';
+    position: absolute;
+    left: -0.05em;
+    right: -0.05em;
+    top: 54%;
+    height: max(3px, 0.07em);
+    background: var(--accent);
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .problem__item .problem__q {
+    color: rgb(242 239 233 / 0.38);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .problem__item .problem__q {
+      color: var(--off-white);
+    }
+    :global(.js) .problem__q::after {
+      transform: scaleX(0);
+      transition: transform 900ms var(--ease-in-out);
+    }
+    :global(.js) .problem__item:global(.is-in) .problem__q {
+      color: rgb(242 239 233 / 0.38);
+      transition-delay: calc(var(--delay, 0ms) + 750ms);
+    }
+    :global(.js) .problem__item:global(.is-in) .problem__q::after {
+      transform: scaleX(1);
+      transition-delay: calc(var(--delay, 0ms) + 650ms);
+    }
   }
 
   .problem__figure {

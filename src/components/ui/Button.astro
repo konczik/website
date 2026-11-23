@@ -1,6 +1,4 @@
 ---
-import Arrow from './Arrow.astro';
-
 interface Props {
   href: string;
   variant?: 'primary' | 'ghost';
@@ -18,6 +16,5 @@ const external = /^(https?:)?\/\//.test(href);
   {...external ? { target: '_blank', rel: 'noopener' } : {}}
   {...rest}
 >
-  <span><slot /></span>
-  <Arrow class="btn__arrow" />
+  <slot />
 </a>
